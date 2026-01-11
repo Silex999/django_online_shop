@@ -1,0 +1,53 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - IT-Store{% endblock %}
+
+{% block content %}
+<div class="container pb-5">
+    <div class="row mt-5">
+        <div class="col-lg-5 mt-5">
+            <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+        </div>
+        
+        <div class="col-lg-7 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="h2">{{ product.name }}</h1>
+                    <p class="h3 py-2 text-success">{{ product.price }} ₽</p>
+                    
+                    <h6>Описание:</h6>
+                    <p>{{ product.description }}</p>
+                    
+                    <form action="{% url 'shop:add_to_cart' product.id %}" method="get">
+                        <button type="submit" class="btn btn-success btn-lg">Добавить в корзину</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if related_products %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="h3 mb-4">Похожие товары</h2>
+        <div class="row">
+            {% for product in related_products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'shop:product_detail' product.slug %}">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    </a>
+                    <div class="card-body">
+                        <a href="{% url 'shop:product_detail' product.slug %}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                        <p class="text-success mt-2">{{ product.price }} ₽</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

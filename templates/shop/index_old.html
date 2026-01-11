@@ -1,0 +1,77 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Главная - IT-Store{% endblock %}
+
+{% block content %}
+<!-- Banner Hero -->
+<div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="{% static 'img/banner_img_01.png' %}" alt="">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left">
+                            <h1 class="h1">Добро пожаловать в <br>IT-Store</h1>
+                            <p>Лучшие компьютерные товары по отличным ценам</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Categories -->
+<section class="container py-5">
+    <div class="row text-center pt-3">
+        <div class="col-lg-6 m-auto">
+            <h1 class="h1">Категории</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-12 col-md-4 p-5 mt-3">
+            <a href="{% url 'shop:shop' %}?category={{ category.slug }}">
+                <h5 class="text-center mt-3 mb-3">{{ category.name }}</h5>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Start Featured Product -->
+<section class="bg-light">
+    <div class="container py-5">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Популярные товары</h1>
+            </div>
+        </div>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'shop:product_detail' product.slug %}">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    </a>
+                    <div class="card-body">
+                        <a href="{% url 'shop:product_detail' product.slug %}" class="h2 text-decoration-none text-dark">{{ product.name }}</a>
+                        <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                        <p class="text-center mb-0">
+                            <strong class="text-success h5">{{ product.price }} ₽</strong>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'shop:add_to_cart' product.id %}" class="btn btn-success btn-sm w-100">В корзину</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

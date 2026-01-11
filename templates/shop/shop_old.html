@@ -1,0 +1,62 @@
+{% load static %}
+{% include 'shop/header.html' %}
+<title>Магазин - Zay Shop</title>
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3">
+            <h1 class="h2 pb-4">Категории</h1>
+            <ul class="list-unstyled templatemo-accordion">
+                <li class="pb-3">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="{% url 'shop:shop' %}">
+                        Все товары
+                    </a>
+                </li>
+                {% for category in categories %}
+                <li class="pb-3">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="?category={{ category.slug }}">
+                        {{ category.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-4">Наши товары</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'shop:product_detail' product.slug %}">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        </a>
+                        <div class="card-body">
+                            <a href="{% url 'shop:product_detail' product.slug %}" class="h2 text-decoration-none text-dark">{{ product.name }}</a>
+                            <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+                            <p class="text-center mb-0">
+                                <strong class="text-success h5">{{ product.price }} ₽</strong>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'shop:add_to_cart' product.id %}" class="btn btn-success btn-sm w-100">В корзину</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <p class="alert alert-info">Товары не найдены</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'shop/footer.html' %}
+{% endblock %}

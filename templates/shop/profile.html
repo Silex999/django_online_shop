@@ -1,0 +1,103 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="apple-touch-icon" href="/static/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/templatemo.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/static/css/fontawesome.min.css">
+<!--
+    
+TemplateMo 559 Zay Shop
+
+https://templatemo.com/tm-559-zay-shop
+
+-->
+<title>Zay Shop - Личный кабинет</title>
+</head>
+ <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% include 'shop/header.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center text-success mb-4">Личный кабинет</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Информация о пользователе</h5>
+            <p><strong>Имя пользователя:</strong> {{ user.username }}<br>
+            <strong>Email:</strong> {{ user.email }}</p>
+        </div>
+    </div>
+    
+    <h3 class="mb-3">История заказов</h3>
+    
+    {% if orders %}
+        {% for order in orders %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5>Заказ #{{ order.id }}</h5>
+                        <p class="text-muted mb-1">Дата: {{ order.created|date:"d.m.Y H:i" }}</p>
+                        <p class="mb-1"><strong>Адрес доставки:</strong> {{ order.address }}</p>
+                        <p class="mb-0"><strong>Телефон:</strong> {{ order.phone }}</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <h4 class="text-success">₽{{ order.total_price }}</h4>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>Товары:</h6>
+                <ul class="list-unstyled">
+                    {% for item in order.items.all %}
+                    <li class="mb-2">
+                        {{ item.product.name }} - {{ item.quantity }} шт. × ${{ item.price }} = ${{ item.get_total_price }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            У вас пока нет заказов. <a href="{% url 'shop:shop' %}" class="alert-link">Перейти к покупкам</a>
+        </div>
+    {% endif %}
+</div>
+{% include 'shop/footer.html' %}
+{% endblock %}
+   <!-- Start Script -->
+    <script src="static/js/jquery-1.11.0.min.js"></script>
+    <script src="static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/templatemo.js"></script>
+    <script src="static/js/custom.js"></script>
+    <!-- End Script -->

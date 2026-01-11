@@ -1,0 +1,70 @@
+
+{% load static %}
+
+{% include 'shop/header.html' %}
+{% block content %}
+<title>Zay Shop - Оформление заказа</title>
+<div class="container py-5">
+    <h1 class="h2 mb-4">Оформление заказа</h1>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Имя *</label>
+                        <input type="text" name="first_name" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Фамилия *</label>
+                        <input type="text" name="last_name" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Телефон *</label>
+                    <input type="tel" name="phone" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Город *</label>
+                    <input type="text" name="city" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Адрес доставки *</label>
+                    <textarea name="address" class="form-control" rows="3" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-success btn-lg">Подтвердить заказ</button>
+            </form>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ваш заказ</h5>
+                    {% for item in cart.items.all %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                        <span>{{ item.get_cost }} ₽</span>
+                    </div>
+                    {% endfor %}
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Итого:</strong>
+                        <strong class="text-success">{{ cart.get_total_price }} ₽</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'shop/footer.html' %}
+{% endblock %}
